@@ -4,8 +4,7 @@
 
 ```mermaid
 graph TD
-    A[My Solution plan] --> B[Understand Requirements]
-    B --> C[Design System Architecture]
+    A[My Solution plan] --> C[Design System Architecture]
     
     C --> D1[Concurrent Data Fetching]
     C --> D2[Word Processing & Validation]
