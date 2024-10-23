@@ -14,8 +14,8 @@ import (
 
 const workerCount = 15 // Number of Goroutines for word processing
 
-func main() {
-	// Step 1: Start CPU profiling
+// setupProfiling sets up CPU profiling and ensures it stops when the program ends.
+func setupProfiling() {
 	f, err := os.Create("cpu.prof")
 	if err != nil {
 		log.Fatal("could not create CPU profile: ", err)
@@ -24,30 +24,54 @@ func main() {
 		log.Fatal("could not start CPU profile: ", err)
 	}
 	defer pprof.StopCPUProfile() // Stop profiling when the program ends
+}
+
+// loadURLs loads URLs from a file and returns a slice of URLs.
+func loadURLs(filename string) ([]string, error) {
+	file, err := os.Open(filename)
+	if err != nil {
+		return nil, fmt.Errorf("could not open file %s: %v", filename, err)
+	}
+	defer file.Close()
+
+	var urls []string
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		urls = append(urls, scanner.Text())
+	}
+	if err := scanner.Err(); err != nil {
+		return nil, fmt.Errorf("error reading file %s: %v", filename, err)
+	}
+	return urls, nil
+}
+
+func main() {
+	// Step 1: Start CPU profiling
+	setupProfiling()
 
 	// Step 2: Record the start time
 	startTime := time.Now()
 
-	// Step 2: Load URLs from file
+	// Step 3: Load URLs from file
 	urls, err := loadURLs("endg-urls")
 	if err != nil {
 		log.Fatal("Error loading URLs:", err)
 	}
 
-	// Step 3: Download and load word bank
+	// Step 4: Download and load word bank
 	wordBankURL := "https://raw.githubusercontent.com/dwyl/english-words/master/words.txt"
 	if err := utils.DownloadWordsFile(wordBankURL, "words.txt"); err != nil {
-		log.Fatal("Error downloading word bank:", err)
+		log.Fatalf("Error downloading word bank from %s: %v", wordBankURL, err)
 	}
 	if err := utils.LoadWordBank("words.txt"); err != nil {
 		log.Fatal("Error loading word bank:", err)
 	}
 
-	// Step 4: Create a word counter and results channel
+	// Step 5: Create a word counter and a results channel
 	wordCounter := utils.NewWordCounter()
 	resultChannel := make(chan string)
 
-	// Step 5: Launch a worker pool for processing words concurrently
+	// Step 6: Launch a worker pool for concurrent word processing
 	var wg sync.WaitGroup
 	for i := 0; i < workerCount; i++ {
 		wg.Add(1)
@@ -60,18 +84,18 @@ func main() {
 		}()
 	}
 
-	// Step 6: Fetch data from URLs and send the content to the resultChannel
+	// Step 7: Fetch data from URLs and send content to the resultChannel
 	var fetchWG sync.WaitGroup
 	for _, url := range urls {
 		fetchWG.Add(1)
 		go func(u string) {
 			defer fetchWG.Done()
-			content, err := utils.FetchContent(u) // Fetch content
+			content, err := utils.FetchContent(u) // Fetch content from the URL
 			if err != nil {
-				log.Println("Error fetching URL:", err)
+				log.Printf("Error fetching content from %s: %v", u, err)
 				return
 			}
-			resultChannel <- content // Send fetched content for processing
+			resultChannel <- content // Send fetched content to be processed
 		}(url)
 	}
 
@@ -82,32 +106,17 @@ func main() {
 	// Wait for all workers to finish processing
 	wg.Wait()
 
-	// Step 7: Get top 10 words
+	// Step 8: Get the top 10 most frequent words
 	topWords := wordCounter.GetTopWords(10)
 
-	// Step 8: Print JSON result
-	jsonResult, _ := json.MarshalIndent(topWords, "", "  ")
+	// Step 9: Print the top words in a JSON formatted output
+	jsonResult, err := json.MarshalIndent(topWords, "", "  ")
+	if err != nil {
+		log.Fatalf("Error marshalling JSON result: %v", err)
+	}
 	fmt.Println(string(jsonResult))
 
-	// Step 9: Calculate and print elapsed time
+	// Step 10: Calculate and print the elapsed time
 	elapsedTime := time.Since(startTime)
 	fmt.Printf("Process completed in %s\n", elapsedTime)
-}
-
-func loadURLs(filename string) ([]string, error) {
-	file, err := os.Open(filename)
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-
-	var urls []string
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		urls = append(urls, scanner.Text())
-	}
-	if err := scanner.Err(); err != nil {
-		return nil, err
-	}
-	return urls, nil
 }

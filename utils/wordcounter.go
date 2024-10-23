@@ -17,6 +17,7 @@ func NewWordCounter() *WordCounter {
 }
 
 // AddWords increments the count of each word found.
+// This function first counts words locally to reduce lock contention.
 func (wc *WordCounter) AddWords(words []string) {
 	localCounts := make(map[string]int)
 
@@ -32,16 +33,13 @@ func (wc *WordCounter) AddWords(words []string) {
 }
 
 // incrementWordCount safely increments the word count in the sync.Map
+// This function uses atomic operations to ensure thread-safe updates.
 func (wc *WordCounter) incrementWordCount(word string, count int) {
-	// Try to load the value from the map
-	actual, loaded := wc.counts.LoadOrStore(word, new(int64)) // Store a pointer to int64
-
+	actual, loaded := wc.counts.LoadOrStore(word, new(int64)) // Store a pointer to int64 for atomic operations
 	if loaded {
-		// If loaded, increment the existing value using atomic
-		atomic.AddInt64(actual.(*int64), int64(count))
+		atomic.AddInt64(actual.(*int64), int64(count)) // Atomically increment the count
 	} else {
-		// Otherwise, initialize the count
-		atomic.StoreInt64(actual.(*int64), int64(count))
+		atomic.StoreInt64(actual.(*int64), int64(count)) // Initialize the count
 	}
 }
 
