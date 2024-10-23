@@ -30,7 +30,7 @@ func FetchContent(url string) (string, error) {
 	var err error
 
 	// Retry logic with exponential backoff
-	for retries := 3; retries > 0; retries-- {
+	for retries := 1; retries > 0; retries-- {
 		response, err = client.Get(url)
 		if err == nil && response.StatusCode == http.StatusOK {
 			break
