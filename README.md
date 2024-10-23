@@ -1,7 +1,4 @@
-# Firefly Assignment
-This project processes multiple URLs, fetches text content, validates words, and identifies the top 10 frequent words.
-
-# Firefly WordCounter Project
+# WordCounter Project
 
 ### My plan to get things done :
 
