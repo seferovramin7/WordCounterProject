@@ -8,7 +8,7 @@ run:
 	go run main.go
 
 docker-build:
-	docker build -t firefly-app .
+	docker build -t wordcounterproject .
 
 docker-run:
-	docker run --rm firefly-app
+	docker run --rm wordcounterproject

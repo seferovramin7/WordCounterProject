@@ -9,6 +9,7 @@ import (
 )
 
 // FetchContent retrieves data from a URL and returns it as a single string.
+// It has optimized Transport settings for faster connection reuse and timeout management.
 func FetchContent(url string) (string, error) {
 	// Optimized Transport for faster connection reuse, keep-alives, and timeout management
 	transport := &http.Transport{
@@ -36,20 +37,19 @@ func FetchContent(url string) (string, error) {
 			break
 		}
 		if retries == 1 {
-			return "", errors.New("failed after multiple retries")
+			return "", errors.New("failed to fetch content after retries")
 		}
-		time.Sleep(time.Duration(4/retries) * time.Second) // Exponential backoff
+		time.Sleep(time.Duration(2*(3-retries)) * time.Second) // Exponential backoff
 	}
-
 	if err != nil {
 		return "", err
 	}
 	defer response.Body.Close()
 
-	// Read the entire response body
 	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		return "", err
 	}
-	return string(body), nil // Return the body as a string
+
+	return string(body), nil
 }

@@ -12,6 +12,8 @@ import (
 // WordBank is a map that stores valid words.
 var WordBank map[string]bool
 
+// LoadWordBank loads words from a local file into the WordBank map.
+// The file is expected to contain one word per line, with no empty lines.
 func LoadWordBank(filename string) error {
 	WordBank = make(map[string]bool)
 
@@ -24,7 +26,7 @@ func LoadWordBank(filename string) error {
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		word := strings.ToLower(scanner.Text())
-		if word != "" {
+		if word != "" && !WordBank[word] {
 			WordBank[word] = true
 		}
 	}
@@ -54,10 +56,4 @@ func DownloadWordsFile(url, filename string) error {
 	buf := make([]byte, 32*1024) // 32 KB buffer for faster I/O
 	_, err = io.CopyBuffer(out, resp.Body, buf)
 	return err
-}
-
-// IsValidWord checks if a word is valid in the word bank.
-func IsValidWord(word string) bool {
-	_, exists := WordBank[strings.ToLower(word)]
-	return exists
 }
