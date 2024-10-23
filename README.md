@@ -47,7 +47,7 @@ graph TD
    K3 --> L
    K4 --> L
 
-   L --> M[Setup Continuous Integration CI]:::yellow
+   L --> M[Setup Continuous Integration CI]:::green
    M --> N[Deploy & Release Standards]:::green
    N --> O[End]:::green
 
