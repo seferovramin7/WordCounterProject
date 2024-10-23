@@ -112,5 +112,3 @@ You can pull and run the pre-built Docker image from Docker Hub:
 - `wordbank.txt`: File containing the list of valid words
 
 ---
-
-You can now copy and paste this updated content into your repository’s `README.md` file. This will add the plan, setup, and usage instructions, as well as the mermaid diagram you requested.
