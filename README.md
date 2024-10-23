@@ -37,9 +37,9 @@ graph TD
    H4 --> I
 
    I --> J[Engineering Standards]:::green
-   J --> K1[Unit Testing & Code Quality]:::yellow
+   J --> K1[Unit Testing & Code Quality]:::green
    J --> K2[Documentation & Instructions]:::green
-   J --> K3[Logging & Error Handling]:::yellow
+   J --> K3[Logging & Error Handling]:::green
    J --> K4[Containerization & Dockerization]:::green
 
    K1 --> L[Prepare Version Control Setup]:::green
