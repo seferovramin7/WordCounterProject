@@ -1,6 +1,6 @@
+
 # WordCounter Project
 
-### My plan to get things done :
 
 ```mermaid
 graph TD
@@ -59,6 +59,17 @@ graph TD
    ZF[To-do]:::yellow
 ```
 
+## Continuous Integration Setup
+
+This project uses **GitHub Actions** for Continuous Integration (CI) to ensure that the codebase remains clean and passes all tests upon every push or pull request.
+
+[![Go CI](https://github.com/seferovramin7/WordCounterProject/actions/workflows/go.yml/badge.svg)](https://github.com/seferovramin7/WordCounterProject/actions/workflows/go.yml)
+
+### CI Pipeline
+
+The CI pipeline is automatically triggered on the following events:
+- On every push to the `master` branch.
+- On every pull request made to the `master` branch.
 
 ## How to Run
 
@@ -78,8 +89,7 @@ You can pull and run the pre-built Docker image from Docker Hub:
    docker run --rm seferovramin7/wordcounterproject
    ```
 
-### Option 2 : To build the project locally : 
-
+### Option 2: To build the project locally:
 
 1. **Build the project**:
    ```bash
@@ -95,9 +105,12 @@ You can pull and run the pre-built Docker image from Docker Hub:
    docker run --rm wordcounterproject
    ```
 
-
 ## Project Structure
 
 - `main.go`: Main application logic
 - `utils/`: Utility functions for fetching, processing, and word validation
 - `wordbank.txt`: File containing the list of valid words
+
+---
+
+You can now copy and paste this updated content into your repository’s `README.md` file. This will add the plan, setup, and usage instructions, as well as the mermaid diagram you requested.
