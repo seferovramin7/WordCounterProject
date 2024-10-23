@@ -4,52 +4,59 @@
 
 ```mermaid
 graph TD
-   A[My Solution plan] --> C[Design System Architecture]
+   A[My Solution plan] --> C[Design System Architecture]:::green
 
-   C --> D1[Concurrent Data Fetching]
-   C --> D2[Word Processing & Validation]
-   C --> D3[Concurrency & Rate Limiting]
-   C --> D4[Top 10 Words Aggregation]
+   C --> D1[Concurrent Data Fetching]:::green
+   C --> D2[Word Processing & Validation]:::green
+   C --> D3[Concurrency & Rate Limiting]:::green
+   C --> D4[Top 10 Words Aggregation]:::green
 
-   D1 --> E1[Set Up Concurrency for Fetching URLs]
-   E1 --> F1[Implement Error Handling & Retry Logic]
-   F1 --> G1[Extract Text Content from URLs]
+   D1 --> E1[Set Up Concurrency for Fetching URLs]:::green
+   E1 --> F1[Implement Error Handling & Retry Logic]:::green
+   F1 --> G1[Extract Text Content from URLs]:::green
 
-   D2 --> E2[Load Word Bank & Preprocess Data]
-   E2 --> F2[Tokenize & Validate Words]
-   F2 --> G2[Count Word Frequencies]
+   D2 --> E2[Load Word Bank & Preprocess Data]:::green
+   E2 --> F2[Tokenize & Validate Words]:::green
+   F2 --> G2[Count Word Frequencies]:::green
 
-   D3 --> E3[Implement Concurrency with Thread Safety]
-   E3 --> F3[Handle Rate Limiting Time-based]
+   D3 --> E3[Implement Concurrency with Thread Safety]:::green
+   E3 --> F3[Handle Rate Limiting Time-based]:::green
 
-   D4 --> E4[Sort Word Frequencies]
-   E4 --> F4[Extract Top 10 Words]
-   F4 --> G4[Format Output as Pretty JSON]
+   D4 --> E4[Sort Word Frequencies]:::green
+   E4 --> F4[Extract Top 10 Words]:::green
+   F4 --> G4[Format Output as Pretty JSON]:::green
 
-   G1 --> H1[Concurrency Completed]
-   G2 --> H2[Word Processing Completed]
-   F3 --> H3[Rate Limiting Completed]
-   G4 --> H4[Output Aggregation Completed]
+   G1 --> H1[Concurrency Completed]:::green
+   G2 --> H2[Word Processing Completed]:::green
+   F3 --> H3[Rate Limiting Completed]:::green
+   G4 --> H4[Output Aggregation Completed]:::green
 
-   H1 --> I[Combine Results]
+   H1 --> I[Combine Results]:::green
    H2 --> I
    H3 --> I
    H4 --> I
 
-   I --> J[Engineering Standards]
-   J --> K1[Unit Testing & Code Quality]
-   J --> K2[Documentation & Instructions]
-   J --> K3[Logging & Error Handling]
-   J --> K4[Containerization & Dockerization]
+   I --> J[Engineering Standards]:::green
+   J --> K1[Unit Testing & Code Quality]:::yellow
+   J --> K2[Documentation & Instructions]:::green
+   J --> K3[Logging & Error Handling]:::yellow
+   J --> K4[Containerization & Dockerization]:::green
 
-   K1 --> L[Prepare Version Control Setup]
+   K1 --> L[Prepare Version Control Setup]:::green
    K2 --> L
    K3 --> L
    K4 --> L
 
-   L --> M[Setup Continuous Integration CI]
-   M --> N[Deploy & Release Standards]
-   N --> O[End]
+   L --> M[Setup Continuous Integration CI]:::yellow
+   M --> N[Deploy & Release Standards]:::green
+   N --> O[End]:::green
+
+%% Color Definitions
+   classDef green fill:#000,color:#fff,stroke:#097969,stroke-width:3px;
+   classDef yellow fill:#000,color:#fff,stroke:#FFC300,stroke-width:1px;
+
+   ZZ[Done]:::green
+   ZF[To-do]:::yellow
 ```
 
 ## How to Run

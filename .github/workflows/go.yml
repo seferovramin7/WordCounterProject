@@ -1,0 +1,56 @@
+name: Go CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+# The jobs that will run on the runner
+jobs:
+  build:
+
+    # The OS to run on (Ubuntu in this case)
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code from the repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 2: Set up Go environment
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: '^1.17'  # Adjust Go version as needed
+
+      # Step 3: Cache Go modules for faster future builds
+      - name: Cache Go modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      # Step 4: Install dependencies
+      - name: Install dependencies
+        run: go mod tidy
+
+      # Step 5: Run tests
+      - name: Run tests
+        run: go test -v ./...
+
+      # Step 6: Run benchmarks (optional, but useful to identify performance regressions)
+      - name: Run benchmarks
+        run: go test -bench=. ./...
+
+      # Optional Step: Build the project (if needed)
+      - name: Build project
+        run: go build -v
